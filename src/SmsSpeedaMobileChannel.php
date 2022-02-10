@@ -2,8 +2,8 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
-use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobileChannel
 {
