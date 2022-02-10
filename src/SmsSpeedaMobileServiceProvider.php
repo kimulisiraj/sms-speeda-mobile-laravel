@@ -2,9 +2,9 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
+use NotificationChannels\SmsSpeedaMobile\Commands\SmsSpeedaMobileCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use NotificationChannels\SmsSpeedaMobile\Commands\SmsSpeedaMobileCommand;
 
 class SmsSpeedaMobileServiceProvider extends PackageServiceProvider
 {

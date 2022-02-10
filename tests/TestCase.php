@@ -3,8 +3,8 @@
 namespace NotificationChannels\SmsSpeedaMobile\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use NotificationChannels\SmsSpeedaMobile\SmsSpeedaMobileServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
