@@ -3,41 +3,34 @@
 namespace NotificationChannels\SmsSpeedaMobile;
 
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http as HttpClient;
-use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobile
 {
-
-    protected string $apiUrl  = 'http://apidocs.speedamobile.com/api/SendSMS';
+    protected string $apiUrl = 'http://apidocs.speedamobile.com/api/SendSMS';
     protected string $smsType = 'P';
-
 
     public function __construct(
         protected string     $apiKey,
         protected string     $apiPassword,
         protected HttpClient $http,
         public ?bool     $debug = false
-
-    )
-    {
+    ) {
     }
-
 
     public function getApiKey(): string
     {
         return $this->apiKey;
     }
 
-
     public function setApiKey(string $apiKey)
     {
         $this->apiKey = $apiKey;
     }
-
 
     protected function httpClient(): HttpClient
     {
@@ -53,7 +46,7 @@ class SmsSpeedaMobile
             throw CouldNotSendNotification::apiKeyNotProvided();
         }
 
-        if ($this->debug){
+        if ($this->debug) {
             Log::debug('SmsSpeedaMobile: sendSms', [
                 'to' => $to,
                 'message' => $message,
@@ -64,9 +57,9 @@ class SmsSpeedaMobile
 
         try {
             return $this->httpClient()->post($this->apiUrl, [
-                "sms_type"    => "P",
-                "encoding"    => "T",
-                "sender_id"   => "BULKSMS",
+                "sms_type" => "P",
+                "encoding" => "T",
+                "sender_id" => "BULKSMS",
                 'textmessage' => $message,
                 'phonenumber' => $to,
             ]);

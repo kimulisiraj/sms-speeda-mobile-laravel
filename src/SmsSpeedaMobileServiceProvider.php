@@ -2,11 +2,11 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
-use NotificationChannels\SmsSpeedaMobile\Commands\SmsSpeedaMobileCommand;
-use Spatie\LaravelPackageTools\Package;
+use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Http as HttpClient;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Notifications\ChannelManager;
+use NotificationChannels\SmsSpeedaMobile\Commands\SmsSpeedaMobileCommand;
+use Spatie\LaravelPackageTools\Package;
 
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

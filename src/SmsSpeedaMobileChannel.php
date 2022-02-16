@@ -2,19 +2,15 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
-
 use Illuminate\Notifications\Notification;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobileChannel
 {
-
     public function __construct(
         protected SmsSpeedaMobile $speedaMobile
-    )
-    {
+    ) {
     }
-
 
     /**
      * @throws CouldNotSendNotification
