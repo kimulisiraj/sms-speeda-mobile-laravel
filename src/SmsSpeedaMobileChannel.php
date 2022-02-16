@@ -2,6 +2,7 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
+use Exception;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
@@ -18,7 +19,8 @@ class SmsSpeedaMobileChannel
     public function send($notifiable, Notification $notification): void
     {
         $to = $this->getTo($notifiable, $notification);
-        $message = $notification->toSpeedaMobile($notifiable);
+
+        $message = $notification->toSpeedaMobile($notifiable); // @phpstan-ignore-line
 
         if (is_string($message)) {
             $message = new SmsSpeedaMobileMessage($message);
@@ -40,22 +42,20 @@ class SmsSpeedaMobileChannel
 
     /**
      * Get the address to send a notification to.
-     *
-     * @param $notifiable
-     * @param Notification|null $notification
-     * @return mixed
      * @throws CouldNotSendNotification
      */
     protected function getTo($notifiable, Notification $notification = null): mixed
     {
-        if ($notifiable->routeNotificationFor(self::class, $notification)) {
-            return $notifiable->routeNotificationFor(self::class, $notification);
-        }
         if ($notifiable->routeNotificationFor('speedaMobile', $notification)) {
             return $notifiable->routeNotificationFor('speedaMobile', $notification);
         }
+
         if (isset($notifiable->phone_number)) {
             return $notifiable->phone_number;
+        }
+
+        if (isset($notifiable->phone)) {
+            return $notifiable->phone;
         }
 
         throw CouldNotSendNotification::invalidReceiver();

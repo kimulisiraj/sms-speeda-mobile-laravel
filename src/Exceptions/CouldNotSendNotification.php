@@ -34,7 +34,7 @@ final class CouldNotSendNotification extends ExceptionAlias
 
     public static function invalidReceiver(): self
     {
-        return new CouldNotSendNotification('The notifiable did not have a receiving phone number. Add a routeNotificationForSmsSpeedaMobile method to your notifiable model.
+        return new CouldNotSendNotification('The notifiable did not have a receiving phone number. Add a routeNotificationForSpeedaMobile method to your notifiable model.
             method or a phone_number attribute to your notifiable.');
     }
 }
