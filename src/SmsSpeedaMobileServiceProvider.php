@@ -4,10 +4,28 @@ namespace NotificationChannels\SmsSpeedaMobile;
 
 use NotificationChannels\SmsSpeedaMobile\Commands\SmsSpeedaMobileCommand;
 use Spatie\LaravelPackageTools\Package;
+use Illuminate\Support\Facades\Http as HttpClient;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Notifications\ChannelManager;
+
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class SmsSpeedaMobileServiceProvider extends PackageServiceProvider
 {
+    public function boot()
+    {
+        Notification::resolved(function (ChannelManager $service) {
+            $service->extend('speedamobile', function ($app) {
+                return new SmsSpeedaMobileChannel(new SmsSpeedaMobile(
+                    apiKey: config('services.speeda_mobile.api_key'),
+                    apiPassword: config('services.speeda_mobile.api_password'),
+                    http: new HttpClient(),
+                    debug: config('services.speeda_mobile.debug', false)
+                ));
+            });
+        });
+    }
+
     public function configurePackage(Package $package): void
     {
         /*

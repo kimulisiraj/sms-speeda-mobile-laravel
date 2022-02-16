@@ -2,30 +2,66 @@
 
 namespace NotificationChannels\SmsSpeedaMobile;
 
+
 use Illuminate\Notifications\Notification;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobileChannel
 {
-    public function __construct()
+
+    public function __construct(
+        protected SmsSpeedaMobile $speedaMobile
+    )
     {
-        // Initialisation code here
+    }
+
+
+    /**
+     * @throws CouldNotSendNotification
+     */
+    public function send($notifiable, Notification $notification): void
+    {
+        $to = $this->getTo($notifiable, $notification);
+        $message = $notification->toSpeedaMobile($notifiable);
+
+        if (is_string($message)) {
+            $message = new SmsSpeedaMobileMessage($message);
+        }
+
+        if (! $message instanceof SmsSpeedaMobileMessage) {
+            throw CouldNotSendNotification::invalidMessageObject($message);
+        }
+
+        try {
+            $this->speedaMobile->sendSms(
+                to: $to,
+                message: $message->body,
+            );
+        } catch (Exception $e) {
+            throw CouldNotSendNotification::serviceRespondedWithAnError($e->getMessage());
+        }
     }
 
     /**
-     * Send the given notification.
+     * Get the address to send a notification to.
      *
-     * @param mixed $notifiable
-     * @param \Illuminate\Notifications\Notification $notification
-     *
-     * @throws \NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
+     * @param $notifiable
+     * @param Notification|null $notification
+     * @return mixed
+     * @throws CouldNotSendNotification
      */
-    public function send($notifiable, Notification $notification)
+    protected function getTo($notifiable, Notification $notification = null): mixed
     {
-        //$response = [a call to the api of your notification send]
+        if ($notifiable->routeNotificationFor(self::class, $notification)) {
+            return $notifiable->routeNotificationFor(self::class, $notification);
+        }
+        if ($notifiable->routeNotificationFor('speedaMobile', $notification)) {
+            return $notifiable->routeNotificationFor('speedaMobile', $notification);
+        }
+        if (isset($notifiable->phone_number)) {
+            return $notifiable->phone_number;
+        }
 
-//        if ($response->error) { // replace this by the code need to check for errors
-//            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
-//        }
+        throw CouldNotSendNotification::invalidReceiver();
     }
 }

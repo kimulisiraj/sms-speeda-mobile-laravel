@@ -4,5 +4,11 @@ namespace NotificationChannels\SmsSpeedaMobile;
 
 class SmsSpeedaMobileMessage
 {
-    // Message structure here
+
+    public function __construct(
+        public string $body
+    )
+    {
+    }
+
 }
