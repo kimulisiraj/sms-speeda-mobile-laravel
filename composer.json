@@ -27,8 +27,8 @@
         "friendsofphp/php-cs-fixer": "^v3.91.0",
         "laravel/pint": "^1.26",
         "orchestra/testbench": "^8.0|^9.0|^10.0",
-        "pestphp/pest": "^v3.0.0|^v4.0.0",
-        "pestphp/pest-plugin-laravel": "^v3.0.0|^v4.0.0",
+        "pestphp/pest": "^v2.0.0|^v3.0.0|^v4.0.0",
+        "pestphp/pest-plugin-laravel": "^v2.0.0|^v3.0.0|^v4.0.0",
         "spatie/pest-plugin-test-time": "^1.1|^2.2"
     },
     "autoload": {
