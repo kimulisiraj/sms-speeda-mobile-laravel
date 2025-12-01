@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NotificationChannels\SmsSpeedaMobile;
 
+use Spatie\LaravelPackageTools\Package;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Notification;
-use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
-use Spatie\LaravelPackageTools\Package;
-
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobileServiceProvider extends PackageServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
-        Notification::resolved(function (ChannelManager $service) {
-            $service->extend('speedaMobile', function ($app) {
+        Notification::resolved(function (ChannelManager $service): void {
+            $service->extend('speedaMobile', function ($app): SmsSpeedaMobileChannel {
                 $key = config('sms-speeda-mobile.api_key');
                 $password = config('sms-speeda-mobile.api_secret');
                 if (! $key || ! $password) {

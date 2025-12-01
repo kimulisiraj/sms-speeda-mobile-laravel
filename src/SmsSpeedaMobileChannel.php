@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NotificationChannels\SmsSpeedaMobile;
 
 use Exception;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
-class SmsSpeedaMobileChannel
+final readonly class SmsSpeedaMobileChannel
 {
     public function __construct(
-        protected SmsSpeedaMobile $speedaMobile
-    ) {
-    }
+        private SmsSpeedaMobile $speedaMobile
+    ) {}
 
     /**
      * @throws CouldNotSendNotification
@@ -20,7 +21,7 @@ class SmsSpeedaMobileChannel
     {
         $to = $this->getTo($notifiable, $notification);
 
-        $message = $notification->toSpeedaMobile($notifiable); // @phpstan-ignore-line
+        $message = $notification->toSpeedaMobile($notifiable);
 
         if (is_string($message)) {
             $message = new SmsSpeedaMobileMessage($message);
@@ -35,16 +36,17 @@ class SmsSpeedaMobileChannel
                 to: $to,
                 message: $message->body,
             );
-        } catch (Exception $e) {
-            throw CouldNotSendNotification::serviceRespondedWithAnError($e->getMessage());
+        } catch (Exception $exception) {
+            throw CouldNotSendNotification::serviceRespondedWithAnError($exception->getMessage());
         }
     }
 
     /**
      * Get the address to send a notification to.
+     *
      * @throws CouldNotSendNotification
      */
-    protected function getTo($notifiable, Notification $notification = null): mixed
+    private function getTo($notifiable, ?Notification $notification = null): mixed
     {
         if ($notifiable->routeNotificationFor('speedaMobile', $notification)) {
             return $notifiable->routeNotificationFor('speedaMobile', $notification);

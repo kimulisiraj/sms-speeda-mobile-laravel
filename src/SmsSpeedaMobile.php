@@ -1,48 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NotificationChannels\SmsSpeedaMobile;
 
 use Exception;
-use Illuminate\Support\Facades\Http as HttpClient;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http as HttpClient;
 use NotificationChannels\SmsSpeedaMobile\Exceptions\CouldNotSendNotification;
 
 class SmsSpeedaMobile
 {
-    protected string $apiUrl = 'http://apidocs.speedamobile.com/api/SendSMS';
-    protected string $smsType = 'P';
+    private string $apiUrl = 'http://apidocs.speedamobile.com/api/SendSMS';
 
     public function __construct(
-        protected string $apiKey,
-        protected string $apiPassword,
-        public ?bool     $debug = false
-    ) {
-    }
+        private readonly string $apiKey,
+        private readonly string $apiPassword,
+        public ?bool $debug = false
+    ) {}
 
     /**
      * @throws CouldNotSendNotification
      */
     public function sendSms(string $to, string $message)
     {
-        if (empty($this->apiKey)) {
+        if ($this->apiKey === '' || $this->apiKey === '0') {
             throw CouldNotSendNotification::apiKeyNotProvided();
         }
 
         if ($this->debug) {
-            Log::debug('SmsSpeedaMobile: sendSms', ['to' => $to, 'message' => $message,]);
+            Log::debug('SmsSpeedaMobile: sendSms', ['to' => $to, 'message' => $message]);
 
             return HttpClient::response();
         }
 
         try {
             $response = HttpClient::post($this->apiUrl, [
-                "api_id" => $this->apiKey,
-                "api_password" => $this->apiPassword,
-                "sms_type" => "P",
-                "encoding" => "T",
-                "sender_id" => "BULKSMS",
-                'textmessage' => trim($message),
+                'api_id' => $this->apiKey,
+                'api_password' => $this->apiPassword,
+                'sms_type' => 'P',
+                'encoding' => 'T',
+                'sender_id' => 'BULKSMS',
+                'textmessage' => mb_trim($message),
                 'phonenumber' => Str::of($to)->replace(' ', '')->replace('-', ''),
             ]);
 
@@ -54,6 +54,8 @@ class SmsSpeedaMobile
 
             return $response;
         } catch (Exception $exception) {
+            throw_if($exception instanceof CouldNotSendNotification, $exception);
+
             throw CouldNotSendNotification::serviceNotAvailable($exception);
         }
     }

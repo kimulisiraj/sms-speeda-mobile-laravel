@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // config for NotificationChannels/SmsSpeedaMobile
 return [
     'api_key' => env('SPEEDA_MOBILE_API_KEY'),
