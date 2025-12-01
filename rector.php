@@ -11,9 +11,6 @@ use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRecto
 return RectorConfig::configure()
     ->withSetProviders(LaravelSetProvider::class)
     ->withComposerBased(laravel: true)
-    ->withSkip([
-        AddOverrideAttributeToOverriddenMethodsRector::class,
-    ])
     ->withPaths([
         __DIR__.'/src',
         __DIR__.'/tests',
@@ -41,4 +38,4 @@ return RectorConfig::configure()
         earlyReturn: true,
         rectorPreset: true,
     )
-    ->withPhpSets(php83: true);
+    ->withPhpSets(php82: true);

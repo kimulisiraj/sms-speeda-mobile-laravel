@@ -42,7 +42,7 @@ class SmsSpeedaMobile
                 'sms_type' => 'P',
                 'encoding' => 'T',
                 'sender_id' => 'BULKSMS',
-                'textmessage' => mb_trim($message),
+                'textmessage' => preg_replace('/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $message),
                 'phonenumber' => Str::of($to)->replace(' ', '')->replace('-', ''),
             ]);
 
