@@ -6,7 +6,6 @@ use Rector\Config\RectorConfig;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelSetProvider;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 
 return RectorConfig::configure()
     ->withSetProviders(LaravelSetProvider::class)
